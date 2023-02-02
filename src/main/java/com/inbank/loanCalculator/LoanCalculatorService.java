@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -50,17 +50,11 @@ public class LoanCalculatorService {
     }
 
     public List<Customer> mockCustomers() {
-        List<Customer> customers = new ArrayList<>();
         Customer customerInDebt = new Customer("49002010965", 300, true);
         Customer customerInSegmentOne = new Customer("49002010976", 100, false);
         Customer customerInSegmentTwo = new Customer("49002010987", 300, false);
         Customer customerInSegmentThree = new Customer("49002010998", 1000, false);
 
-        customers.add(customerInDebt);
-        customers.add(customerInSegmentOne);
-        customers.add(customerInSegmentTwo);
-        customers.add(customerInSegmentThree);
-
-        return customers;
+        return Arrays.asList(customerInDebt, customerInSegmentOne, customerInSegmentTwo, customerInSegmentThree);
     }
 }
