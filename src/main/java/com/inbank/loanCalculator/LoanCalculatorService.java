@@ -40,7 +40,7 @@ public class LoanCalculatorService {
         return (creditModifier / loanAmount) * loanPeriod;
     }
 
-    public int calculateMaximumSum(float creditScore, float loanAmount) {
+    public float calculateMaximumSum(float creditScore, float loanAmount) {
         return (int) (creditScore * loanAmount);
     }
 
