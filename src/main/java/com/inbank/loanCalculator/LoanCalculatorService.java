@@ -1,8 +1,10 @@
 package com.inbank.loanCalculator;
 
+import com.inbank.loanCalculator.exception.ApplicationCustomException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +21,11 @@ public class LoanCalculatorService {
                 .orElse(null);
 
         if (customer == null) {
-            throw new Exception("Personal code is not found!");
+            throw new ApplicationCustomException("Account not found!");
         }
 
         if (customer.isHasLoan()) {
-            throw new Exception("Customer has a loan already!");
+            throw new ApplicationCustomException("Customer has a loan already!");
         }
 
         float creditScore = calculateCreditScore(customer.getCreditModifier(), loanCalculatorRequest.getLoanAmount(), loanCalculatorRequest.getLoanPeriod());
@@ -32,16 +34,19 @@ public class LoanCalculatorService {
         return Math.min(maximumSum, MAXIMUM_SUM);
     }
 
-    public float calculateCreditScore(int creditModifier, float loanAmount, int loanPeriod) {
-        if (loanAmount == 0) {
-            return 0;
+    public float calculateCreditScore(int creditModifier, float loanAmount, int loanPeriod) throws ApplicationCustomException {
+        if (loanAmount <= 0) {
+            throw new ApplicationCustomException("Loan amount is invalid!");
         }
 
         return (creditModifier / loanAmount) * loanPeriod;
     }
 
     public float calculateMaximumSum(float creditScore, float loanAmount) {
-        return (int) (creditScore * loanAmount);
+        float maximumSum = creditScore * loanAmount;
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+
+        return Float.parseFloat(decimalFormat.format(maximumSum));
     }
 
     public List<Customer> mockCustomers() {

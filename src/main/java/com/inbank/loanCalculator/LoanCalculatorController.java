@@ -1,5 +1,6 @@
 package com.inbank.loanCalculator;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ public class LoanCalculatorController {
     private final LoanCalculatorService loanCalculatorService;
 
     @PostMapping
-    public ResponseEntity<LoanCalculatorResponse> calculateMaximumLoanAmount(@RequestBody LoanCalculatorRequest loanCalculatorRequest) throws Exception {
+    public ResponseEntity<LoanCalculatorResponse> calculateMaximumLoanAmount(@RequestBody @Valid LoanCalculatorRequest loanCalculatorRequest) throws Exception {
         float maximumSum = loanCalculatorService.calculateMaximumLoanAmount(loanCalculatorRequest);
 
         LoanCalculatorResponse response = new LoanCalculatorResponse(maximumSum);
