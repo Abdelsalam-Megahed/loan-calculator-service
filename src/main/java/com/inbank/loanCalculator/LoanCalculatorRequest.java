@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoanCalculatorRequest {
     private String personalCode;
-    private Long loanAmount;
+    private float loanAmount;
     private int loanPeriod;
 }

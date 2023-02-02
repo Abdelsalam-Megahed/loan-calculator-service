@@ -13,7 +13,7 @@ public class LoanCalculatorController {
     private final LoanCalculatorService loanCalculatorService;
 
     @PostMapping
-    public Customer calculateMaximumLoanAmount(@RequestBody LoanCalculatorRequest loanCalculatorRequest) throws Exception {
+    public float calculateMaximumLoanAmount(@RequestBody LoanCalculatorRequest loanCalculatorRequest) throws Exception {
         return loanCalculatorService.calculateMaximumLoanAmount(loanCalculatorRequest);
     }
 }

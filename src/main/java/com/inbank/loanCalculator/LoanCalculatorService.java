@@ -9,7 +9,9 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class LoanCalculatorService {
-    public Customer calculateMaximumLoanAmount(LoanCalculatorRequest loanCalculatorRequest) throws Exception {
+    final int MAXIMUM_SUM = 10000;
+
+    public float calculateMaximumLoanAmount(LoanCalculatorRequest loanCalculatorRequest) throws Exception {
         List<Customer> customers = mockCustomers();
         Customer customer = customers.stream()
                 .filter(c -> loanCalculatorRequest.getPersonalCode().equals(c.getPersonalCode()))
@@ -24,7 +26,22 @@ public class LoanCalculatorService {
             throw new Exception("Customer has a loan already!");
         }
 
-        return customer;
+        float creditScore = calculateCreditScore(customer.getCreditModifier(), loanCalculatorRequest.getLoanAmount(), loanCalculatorRequest.getLoanPeriod());
+        float maximumSum = calculateMaximumSum(creditScore, loanCalculatorRequest.getLoanAmount());
+
+        return Math.min(maximumSum, MAXIMUM_SUM);
+    }
+
+    public float calculateCreditScore(int creditModifier, float loanAmount, int loanPeriod) {
+        if (loanAmount == 0) {
+            return 0;
+        }
+
+        return (creditModifier / loanAmount) * loanPeriod;
+    }
+
+    public int calculateMaximumSum(float creditScore, float loanAmount) {
+        return (int) (creditScore * loanAmount);
     }
 
     public List<Customer> mockCustomers() {
@@ -32,7 +49,7 @@ public class LoanCalculatorService {
         Customer customerInDebt = new Customer("49002010965", 300, true);
         Customer customerInSegmentOne = new Customer("49002010976", 100, false);
         Customer customerInSegmentTwo = new Customer("49002010987", 300, false);
-        Customer customerInSegmentThree = new Customer("49002010987", 1000, false);
+        Customer customerInSegmentThree = new Customer("49002010998", 1000, false);
 
         customers.add(customerInDebt);
         customers.add(customerInSegmentOne);
