@@ -12,6 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 public class LoanCalculatorService {
     final int MAXIMUM_SUM = 10000;
+    final int MINIMUM_SUM = 2000;
+    final int MAXIMUM_PERIOD = 60;
 
     public LoanCalculatorResponse calculateMaximumLoanAmount(LoanCalculatorRequest loanCalculatorRequest) throws Exception {
         int loanPeriod = loanCalculatorRequest.getLoanPeriod();
@@ -30,13 +32,14 @@ public class LoanCalculatorService {
         }
 
         float creditScore = calculateCreditScore(customer.getCreditModifier(), loanCalculatorRequest.getLoanAmount(), loanPeriod);
+        float maximumSum = calculateMaximumSum(creditScore, loanCalculatorRequest.getLoanAmount());
 
-        while (creditScore < 1 && loanPeriod < 60) {
+        while (maximumSum < MINIMUM_SUM && loanPeriod < MAXIMUM_PERIOD && creditScore < 1) {
             loanPeriod = loanPeriod + 1;
             creditScore = calculateCreditScore(customer.getCreditModifier(), loanCalculatorRequest.getLoanAmount(), loanPeriod);
         }
 
-        float maximumSum = calculateMaximumSum(creditScore, loanCalculatorRequest.getLoanAmount());
+        maximumSum = calculateMaximumSum(creditScore, loanCalculatorRequest.getLoanAmount());
 
         return new LoanCalculatorResponse(Math.min(maximumSum, MAXIMUM_SUM), loanPeriod);
     }
