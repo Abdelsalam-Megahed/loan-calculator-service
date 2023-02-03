@@ -35,6 +35,16 @@ class LoanCalculatorApplicationTests {
 	}
 
 	@Test
+	void itShouldThrowExceptionIfRequestedAmountIsMoreThan10K() throws Exception {
+		LoanCalculatorRequest customerRequest = new LoanCalculatorRequest("49002010976", 12000, 14);
+
+		mockMvc.perform(post("/api/v1/calculate")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(Objects.requireNonNull(ObjectToJson(customerRequest))))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
 	void itShouldReturnMaxSumForSegmentOne() throws Exception {
 		LoanCalculatorRequest customerRequest = new LoanCalculatorRequest("49002010976", 5000, 14);
 
@@ -47,6 +57,21 @@ class LoanCalculatorApplicationTests {
 		String response = calculatorResult.getResponse().getContentAsString();
 
 		assertThat(response).contains("1400");
+	}
+
+	@Test
+	void itShouldNotReturnMoreThan10K() throws Exception {
+		LoanCalculatorRequest customerRequest = new LoanCalculatorRequest("49002010998", 5600, 14); //personal code for segment three
+
+		MvcResult calculatorResult = mockMvc.perform(post("/api/v1/calculate")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(Objects.requireNonNull(ObjectToJson(customerRequest))))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		String response = calculatorResult.getResponse().getContentAsString();
+
+		assertThat(response).contains("10000");
 	}
 
 	private String ObjectToJson(Object object) throws JsonProcessingException {
