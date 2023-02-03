@@ -7,4 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class LoanCalculatorResponse {
     private float amount;
+    private int loanPeriod;
 }

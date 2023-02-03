@@ -13,7 +13,8 @@ import java.util.List;
 public class LoanCalculatorService {
     final int MAXIMUM_SUM = 10000;
 
-    public float calculateMaximumLoanAmount(LoanCalculatorRequest loanCalculatorRequest) throws Exception {
+    public LoanCalculatorResponse calculateMaximumLoanAmount(LoanCalculatorRequest loanCalculatorRequest) throws Exception {
+        int loanPeriod = loanCalculatorRequest.getLoanPeriod();
         List<Customer> customers = mockCustomers();
         Customer customer = customers.stream()
                 .filter(c -> loanCalculatorRequest.getPersonalCode().equals(c.getPersonalCode()))
@@ -28,10 +29,16 @@ public class LoanCalculatorService {
             throw new ApplicationCustomException("Customer has a loan already!");
         }
 
-        float creditScore = calculateCreditScore(customer.getCreditModifier(), loanCalculatorRequest.getLoanAmount(), loanCalculatorRequest.getLoanPeriod());
+        float creditScore = calculateCreditScore(customer.getCreditModifier(), loanCalculatorRequest.getLoanAmount(), loanPeriod);
+
+        while (creditScore < 1 && loanPeriod < 60) {
+            loanPeriod = loanPeriod + 1;
+            creditScore = calculateCreditScore(customer.getCreditModifier(), loanCalculatorRequest.getLoanAmount(), loanPeriod);
+        }
+
         float maximumSum = calculateMaximumSum(creditScore, loanCalculatorRequest.getLoanAmount());
 
-        return Math.min(maximumSum, MAXIMUM_SUM);
+        return new LoanCalculatorResponse(Math.min(maximumSum, MAXIMUM_SUM), loanPeriod);
     }
 
     public float calculateCreditScore(int creditModifier, float loanAmount, int loanPeriod) throws ApplicationCustomException {

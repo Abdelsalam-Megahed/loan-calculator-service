@@ -56,7 +56,7 @@ class LoanCalculatorApplicationTests {
 
 		String response = calculatorResult.getResponse().getContentAsString();
 
-		assertThat(response).contains("1400");
+		assertThat(response).contains("5000"); //period is also prolonged
 	}
 
 	@Test
