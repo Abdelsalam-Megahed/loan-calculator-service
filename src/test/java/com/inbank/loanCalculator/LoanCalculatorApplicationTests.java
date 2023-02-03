@@ -46,6 +46,21 @@ class LoanCalculatorApplicationTests {
 
 	@Test
 	void itShouldReturnMaxSumForSegmentOne() throws Exception {
+		LoanCalculatorRequest customerRequest = new LoanCalculatorRequest("49002010976", 5000, 40);
+
+		MvcResult calculatorResult = mockMvc.perform(post("/api/v1/calculate")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(Objects.requireNonNull(ObjectToJson(customerRequest))))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		String response = calculatorResult.getResponse().getContentAsString();
+
+		assertThat(response).contains("4000");
+	}
+
+	@Test
+	void itShouldReturnMaxSumAndProlongLoanPeriodWhenAmountIsBelowTheMinimum() throws Exception {
 		LoanCalculatorRequest customerRequest = new LoanCalculatorRequest("49002010976", 5000, 14);
 
 		MvcResult calculatorResult = mockMvc.perform(post("/api/v1/calculate")
@@ -56,7 +71,7 @@ class LoanCalculatorApplicationTests {
 
 		String response = calculatorResult.getResponse().getContentAsString();
 
-		assertThat(response).contains("5000"); //period is also prolonged
+		assertThat(response).contains("2000"); //period is also prolonged
 	}
 
 	@Test

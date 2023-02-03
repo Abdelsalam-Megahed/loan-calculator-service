@@ -34,12 +34,10 @@ public class LoanCalculatorService {
         float creditScore = calculateCreditScore(customer.getCreditModifier(), loanCalculatorRequest.getLoanAmount(), loanPeriod);
         float maximumSum = calculateMaximumSum(creditScore, loanCalculatorRequest.getLoanAmount());
 
-        while (maximumSum < MINIMUM_SUM && loanPeriod < MAXIMUM_PERIOD && creditScore < 1) {
-            loanPeriod = loanPeriod + 1;
-            creditScore = calculateCreditScore(customer.getCreditModifier(), loanCalculatorRequest.getLoanAmount(), loanPeriod);
+        if (maximumSum < MINIMUM_SUM) {
+            loanPeriod = (int) ((loanCalculatorRequest.getLoanPeriod() * MINIMUM_SUM) / maximumSum);
+            maximumSum = MINIMUM_SUM;
         }
-
-        maximumSum = calculateMaximumSum(creditScore, loanCalculatorRequest.getLoanAmount());
 
         return new LoanCalculatorResponse(Math.min(maximumSum, MAXIMUM_SUM), loanPeriod);
     }
