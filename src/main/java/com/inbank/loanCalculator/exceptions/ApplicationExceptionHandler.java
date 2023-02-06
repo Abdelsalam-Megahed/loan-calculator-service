@@ -1,6 +1,7 @@
 package com.inbank.loanCalculator.exceptions;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -30,6 +31,16 @@ public class ApplicationExceptionHandler {
         Map<String, String> errorMap = new HashMap<>();
 
         errorMap.put("error", exception.getMessage());
+
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public Map<String, String> handleMessageNotReadableException(HttpMessageNotReadableException exception) {
+        Map<String, String> errorMap = new HashMap<>();
+
+        errorMap.put("error", "Invalid request!");
 
         return errorMap;
     }
