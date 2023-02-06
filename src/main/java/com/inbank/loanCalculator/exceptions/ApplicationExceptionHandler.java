@@ -1,4 +1,4 @@
-package com.inbank.loanCalculator.exception;
+package com.inbank.loanCalculator.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;

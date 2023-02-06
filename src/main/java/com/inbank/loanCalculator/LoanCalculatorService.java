@@ -1,11 +1,11 @@
 package com.inbank.loanCalculator;
 
-import com.inbank.loanCalculator.exception.ApplicationCustomException;
+import com.inbank.loanCalculator.exceptions.ApplicationCustomException;
+import com.inbank.loanCalculator.utils.Mocker;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -17,7 +17,7 @@ public class LoanCalculatorService {
 
     public LoanCalculatorResponse calculateMaximumLoanAmount(LoanCalculatorRequest loanCalculatorRequest) throws Exception {
         int loanPeriod = loanCalculatorRequest.getLoanPeriod();
-        List<Customer> customers = mockCustomers();
+        List<Customer> customers = Mocker.mockCustomers();
         Customer customer = customers.stream()
                 .filter(c -> loanCalculatorRequest.getPersonalCode().equals(c.getPersonalCode()))
                 .findAny()
@@ -55,14 +55,5 @@ public class LoanCalculatorService {
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
 
         return Float.parseFloat(decimalFormat.format(maximumSum));
-    }
-
-    public List<Customer> mockCustomers() {
-        Customer customerInDebt = new Customer("49002010965", 300, true);
-        Customer customerInSegmentOne = new Customer("49002010976", 100, false);
-        Customer customerInSegmentTwo = new Customer("49002010987", 300, false);
-        Customer customerInSegmentThree = new Customer("49002010998", 1000, false);
-
-        return Arrays.asList(customerInDebt, customerInSegmentOne, customerInSegmentTwo, customerInSegmentThree);
     }
 }
