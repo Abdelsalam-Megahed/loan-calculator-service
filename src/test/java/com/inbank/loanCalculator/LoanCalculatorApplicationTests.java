@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,53 +26,33 @@ class LoanCalculatorApplicationTests {
 	private ObjectMapper objectMapper;
 
 	@Test
-	void itShouldThrowExceptionIfCustomerHasLoan() throws Exception {
-		LoanCalculatorRequest customerRequest = new LoanCalculatorRequest("49002010965", 3000, 16);
-
-		mockMvc.perform(post("/api/v1/calculate")
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(Objects.requireNonNull(ObjectToJson(customerRequest))))
-				.andExpect(status().isBadRequest());
-	}
-
-	@Test
-	void itShouldThrowExceptionIfRequestedAmountIsMoreThan10K() throws Exception {
-		LoanCalculatorRequest customerRequest = new LoanCalculatorRequest("49002010976", 12000, 14);
-
-		mockMvc.perform(post("/api/v1/calculate")
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(Objects.requireNonNull(ObjectToJson(customerRequest))))
-				.andExpect(status().isBadRequest());
-	}
-
-	@Test
 	void itShouldReturnMaxSumForSegmentOne() throws Exception {
-		LoanCalculatorRequest customerRequest = new LoanCalculatorRequest("49002010976", 5000, 40);
+		LoanCalculatorRequest customerRequest = new LoanCalculatorRequest("49002010976", 5000, 40); //personal code for segment one
 
 		MvcResult calculatorResult = mockMvc.perform(post("/api/v1/calculate")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(Objects.requireNonNull(ObjectToJson(customerRequest))))
 				.andExpect(status().isOk())
 				.andReturn();
+		LoanCalculatorResponse response = JsonToObject(calculatorResult);
 
-		String response = calculatorResult.getResponse().getContentAsString();
-
-		assertThat(response).contains("4000");
+		assertThat(response.getAmount()).isEqualTo(4000);
+		assertThat(response.getLoanPeriod()).isEqualTo(40);
 	}
 
 	@Test
 	void itShouldReturnMaxSumAndProlongLoanPeriodWhenAmountIsBelowTheMinimum() throws Exception {
-		LoanCalculatorRequest customerRequest = new LoanCalculatorRequest("49002010976", 5000, 14);
+		LoanCalculatorRequest customerRequest = new LoanCalculatorRequest("49002010976", 5000, 14); //personal code for segment one
 
 		MvcResult calculatorResult = mockMvc.perform(post("/api/v1/calculate")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(Objects.requireNonNull(ObjectToJson(customerRequest))))
 				.andExpect(status().isOk())
 				.andReturn();
+		LoanCalculatorResponse response = JsonToObject(calculatorResult);
 
-		String response = calculatorResult.getResponse().getContentAsString();
-
-		assertThat(response).contains("2000"); //period is also prolonged
+		assertThat(response.getAmount()).isEqualTo(2000);
+		assertThat(response.getLoanPeriod()).isEqualTo(20);
 	}
 
 	@Test
@@ -83,13 +64,37 @@ class LoanCalculatorApplicationTests {
 						.content(Objects.requireNonNull(ObjectToJson(customerRequest))))
 				.andExpect(status().isOk())
 				.andReturn();
+		LoanCalculatorResponse response = JsonToObject(calculatorResult);
 
-		String response = calculatorResult.getResponse().getContentAsString();
+		assertThat(response.getAmount()).isEqualTo(10000);
+		assertThat(response.getLoanPeriod()).isEqualTo(14);
+	}
 
-		assertThat(response).contains("10000");
+	@Test
+	void itShouldGiveBadRequestIfCustomerHasLoan() throws Exception {
+		LoanCalculatorRequest customerRequest = new LoanCalculatorRequest("49002010965", 3000, 16);
+
+		mockMvc.perform(post("/api/v1/calculate")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(Objects.requireNonNull(ObjectToJson(customerRequest))))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	void itShouldGiveBadRequestIfRequestedAmountIsMoreThan10K() throws Exception {
+		LoanCalculatorRequest customerRequest = new LoanCalculatorRequest("49002010976", 12000, 14); //personal code for segment one
+
+		mockMvc.perform(post("/api/v1/calculate")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(Objects.requireNonNull(ObjectToJson(customerRequest))))
+				.andExpect(status().isBadRequest());
 	}
 
 	private String ObjectToJson(Object object) throws JsonProcessingException {
 		return objectMapper.writeValueAsString(object);
+	}
+
+	private LoanCalculatorResponse JsonToObject(MvcResult mvcResult) throws UnsupportedEncodingException, JsonProcessingException {
+		return objectMapper.readValue(mvcResult.getResponse().getContentAsString(), LoanCalculatorResponse.class);
 	}
 }
