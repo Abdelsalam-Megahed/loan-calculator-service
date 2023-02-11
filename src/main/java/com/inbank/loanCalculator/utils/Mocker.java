@@ -1,6 +1,6 @@
 package com.inbank.loanCalculator.utils;
 
-import com.inbank.loanCalculator.Customer;
+import com.inbank.loanCalculator.models.Customer;
 
 import java.util.Arrays;
 import java.util.List;

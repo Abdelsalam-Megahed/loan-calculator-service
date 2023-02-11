@@ -26,4 +26,8 @@ Decision engine for calculating maximum loan amount
   output would the minimum sum, `(loanPeriod * MINIMUM_SUM) / calculated maximumSum`
 - The API response would be the max sum and the loan period
 - Exception handling is set in place
-- Added some integrations tests for different scenarios of success and failure
+- Added some integrations tests for different scenarios of success and failure, test coverage is at 85%
+
+### improvements
+
+- Tests on the unit level

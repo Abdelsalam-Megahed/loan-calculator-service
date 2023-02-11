@@ -1,5 +1,8 @@
-package com.inbank.loanCalculator;
+package com.inbank.loanCalculator.controllers;
 
+import com.inbank.loanCalculator.requests.LoanCalculatorRequest;
+import com.inbank.loanCalculator.responses.LoanCalculatorResponse;
+import com.inbank.loanCalculator.services.LoanCalculatorService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

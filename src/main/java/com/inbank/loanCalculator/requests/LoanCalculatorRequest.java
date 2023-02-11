@@ -1,4 +1,4 @@
-package com.inbank.loanCalculator;
+package com.inbank.loanCalculator.requests;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

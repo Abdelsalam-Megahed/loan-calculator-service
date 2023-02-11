@@ -2,6 +2,8 @@ package com.inbank.loanCalculator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.inbank.loanCalculator.requests.LoanCalculatorRequest;
+import com.inbank.loanCalculator.responses.LoanCalculatorResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

@@ -1,6 +1,9 @@
-package com.inbank.loanCalculator;
+package com.inbank.loanCalculator.services;
 
 import com.inbank.loanCalculator.exceptions.ApplicationCustomException;
+import com.inbank.loanCalculator.models.Customer;
+import com.inbank.loanCalculator.requests.LoanCalculatorRequest;
+import com.inbank.loanCalculator.responses.LoanCalculatorResponse;
 import com.inbank.loanCalculator.utils.Mocker;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

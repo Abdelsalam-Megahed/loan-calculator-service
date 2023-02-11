@@ -1,4 +1,4 @@
-package com.inbank.loanCalculator;
+package com.inbank.loanCalculator.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
