@@ -14,8 +14,8 @@ public class LoanCalculatorController {
     private final LoanCalculatorService loanCalculatorService;
 
     @PostMapping
-    public ResponseEntity<LoanCalculatorResponse> calculateMaximumLoanAmount(@RequestBody @Valid LoanCalculatorRequest loanCalculatorRequest) throws Exception {
-        LoanCalculatorResponse response = loanCalculatorService.calculateMaximumLoanAmount(loanCalculatorRequest);
+    public ResponseEntity<LoanCalculatorResponse> calculateMaximumLoanSum(@RequestBody @Valid LoanCalculatorRequest loanCalculatorRequest) throws Exception {
+        LoanCalculatorResponse response = loanCalculatorService.calculateMaximumLoanSum(loanCalculatorRequest);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

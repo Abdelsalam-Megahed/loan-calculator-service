@@ -13,9 +13,8 @@ import java.util.List;
 public class LoanCalculatorService {
     final int MAXIMUM_SUM = 10000;
     final int MINIMUM_SUM = 2000;
-    final int MAXIMUM_PERIOD = 60;
 
-    public LoanCalculatorResponse calculateMaximumLoanAmount(LoanCalculatorRequest loanCalculatorRequest) throws Exception {
+    public LoanCalculatorResponse calculateMaximumLoanSum(LoanCalculatorRequest loanCalculatorRequest) throws Exception {
         int loanPeriod = loanCalculatorRequest.getLoanPeriod();
         List<Customer> customers = Mocker.mockCustomers();
         Customer customer = customers.stream()
@@ -35,7 +34,7 @@ public class LoanCalculatorService {
         float maximumSum = calculateMaximumSum(creditScore, loanCalculatorRequest.getLoanAmount());
 
         if (maximumSum < MINIMUM_SUM) {
-            loanPeriod = (int) ((loanCalculatorRequest.getLoanPeriod() * MINIMUM_SUM) / maximumSum);
+            loanPeriod = calculateNewPeriod(loanCalculatorRequest.getLoanPeriod(), maximumSum);
             maximumSum = MINIMUM_SUM;
         }
 
@@ -55,5 +54,9 @@ public class LoanCalculatorService {
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
 
         return Float.parseFloat(decimalFormat.format(maximumSum));
+    }
+
+    public int calculateNewPeriod(int requestedLoanPeriod, float maximumSum){
+        return (int) ((requestedLoanPeriod * MINIMUM_SUM) / maximumSum);
     }
 }
