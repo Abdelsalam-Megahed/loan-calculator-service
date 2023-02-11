@@ -26,11 +26,11 @@ public class LoanCalculatorService {
                 .orElse(null);
 
         if (customer == null) {
-            throw new ApplicationCustomException("Account not found!");
+            throw new ApplicationCustomException("Error! Personal code not found.");
         }
 
         if (customer.isHasLoan()) {
-            throw new ApplicationCustomException("Customer has a loan already!");
+            throw new ApplicationCustomException("Loan request rejected. You have a loan already!");
         }
 
         float creditScore = calculateCreditScore(customer.getCreditModifier(), loanCalculatorRequest.getLoanAmount(), loanPeriod);
