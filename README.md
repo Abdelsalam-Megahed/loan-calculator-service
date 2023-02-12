@@ -2,6 +2,8 @@
 
 Decision engine for calculating maximum loan amount
 
+Java, Gradle and Spring Boot were chosen to implement this service
+
 ### Usage
 
 1. Clone the project
@@ -11,22 +13,20 @@ Decision engine for calculating maximum loan amount
 
 ### My thought process
 
-- Java, Gradle and Spring Boot was chosen to be the stack of this service.
-- Mocked customers for the sake of simplicity in the Mocker class
+- Mocked customers for the sake of simplicity in the Mocker class as advised
 - Started with implementing an endpoint for calculating the loan maximum sum which takes a validated request based on
-  the given constraints,
-  then the controller passes the validated request to the service in order to process it further
+  the given constraints, then the controller passes the validated request to the service in order to process it further
 - The LoanCalculatorService searches for the given customer in the mocked customer by the personal code, if not found it
   will throw an exception
 - If the customer is found and has a loan, it will throw an exception
-- The service class would then proceed with calculating the maximum sum by calculating the credit score first according
-  to the given equation `(creditModifier / loanAmount) * loanPeriod`
-- After having the credit score, maximum sum can be calculated as follows `(creditScore * loanAmount)`
-- if max sum turned out to be less than the minimum sum then the service would try to recalculate the period so the
+- In the case that no exception was thrown, the service class would then proceed with calculating the maximum sum
+  by calculating the credit score first according to the given equation `(creditModifier / loanAmount) * loanPeriod`
+- After having calculated the credit score, maximum sum can be calculated as follows `(creditScore * loanAmount)`
+- If max sum turned out to be less than the minimum sum then the service would try to recalculate the period so the
   output would the minimum sum, `(loanPeriod * MINIMUM_SUM) / calculated maximumSum`
 - The API response would be the max sum and the loan period
 - Exception handling is set in place
-- Added some integrations tests for different scenarios of success and failure, test coverage is at 85%
+- Added some integration tests for different scenarios of success and failure, test coverage is at 85%
 
 ### improvements
 
