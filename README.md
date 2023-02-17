@@ -2,7 +2,7 @@
 
 Decision engine for calculating maximum loan amount
 
-Java, Gradle and Spring Boot were chosen to implement this service
+Stack: Java 17, Gradle 7.6 and Spring Boot 3.0.2
 
 ### Usage
 
@@ -31,3 +31,4 @@ Java, Gradle and Spring Boot were chosen to implement this service
 ### improvements
 
 - Tests on the unit level
+- Dockerfile as a containerization solution
