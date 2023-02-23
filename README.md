@@ -31,4 +31,5 @@ Stack: Java 17, Gradle 7.6 and Spring Boot 3.0.2
 ### improvements
 
 - Tests on the unit level
+- Implement an API rate limiting algorithm in order to have a defense mechanism against DoS attacks
 - Dockerfile as a containerization solution
